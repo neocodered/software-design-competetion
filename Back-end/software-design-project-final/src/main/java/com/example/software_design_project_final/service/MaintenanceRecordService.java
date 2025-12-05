@@ -79,6 +79,10 @@ public class MaintenanceRecordService {
         }
 
         Image maintenanceImage = resolveMaintenanceImage(transformerId, inspection);
+        // Fallback: if inspectionId not provided, derive inspection from maintenance image
+        if (inspection == null && maintenanceImage != null && maintenanceImage.getInspection() != null) {
+            inspection = maintenanceImage.getInspection();
+        }
         List<Annotation> annotations = loadAnnotations(transformerId, inspection, maintenanceImage);
 
         MaintenanceRecordResponse response = new MaintenanceRecordResponse();

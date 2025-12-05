@@ -78,7 +78,16 @@
   color: #64748b;
 }
 
+.print-only { display: none; }
+.screen-only { display: block; }
+.print-avoid-break { break-inside: avoid; page-break-inside: avoid; }
+
 @media print {
+  @page {
+    size: A4 portrait;
+    margin: 14mm;
+  }
+
   body {
     background: #ffffff !important;
   }
@@ -104,4 +113,43 @@
   .maintenance-record-page .history-table {
     page-break-before: always;
   }
+
+  .print-only { display: block !important; }
+  .screen-only { display: none !important; }
+
+  .maintenance-record-page .meta-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .maintenance-record-page .anomaly-notes {
+    border: none;
+    background: transparent;
+    resize: none;
+  }
+
+  .page-break { page-break-before: always; }
+
+  /* Never split image frames across pages */
+  .print-avoid-break,
+  .print-avoid-break * {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+  .maintenance-record-page img,
+  .maintenance-record-page canvas {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    max-width: 100% !important;
+  }
+
+  /* Hide app toolbars and controls if any slipped through */
+  .toolbar,
+  .preview-annotation-toolbar,
+  .preview-settings-btn { display: none !important; }
+
+  /* Hide global app sidebar and stretch content */
+  .app-sidebar { display: none !important; }
+  .app-layout, .app-content { width: 100% !important; }
+  .app-content { flex: 0 0 100% !important; max-width: 100% !important; padding: 0 !important; }
+  .app-layout .row { margin: 0 !important; }
 }

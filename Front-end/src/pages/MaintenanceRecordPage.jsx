@@ -337,12 +337,34 @@ export default function MaintenanceRecordPage() {
 
   return (
     <div className="maintenance-record-page">
+      {/* Print header (visible only when printing) */}
+      <div className="print-only">
+        <div className="d-flex justify-content-between align-items-start mb-3">
+          <div>
+            <h1 className="fw-bold" style={{ fontSize: "1.6rem", margin: 0 }}>Maintenance Record</h1>
+            <div className="text-muted">Generated: {formatDateTime(new Date().toISOString())}</div>
+          </div>
+          <div className="text-end">
+            <div className="fw-semibold">Transformer: {transformerMeta.transformerNo || "—"}</div>
+            <div>Inspection No: {inspectionMeta.inspectionNo || "—"}</div>
+          </div>
+        </div>
+        <div className="meta-grid mb-3">
+          <MetaItem label="Transformer No" value={transformerMeta.transformerNo || "—"} />
+          <MetaItem label="Pole No" value={transformerMeta.pole_no || "—"} />
+          <MetaItem label="Region" value={transformerMeta.region || "—"} />
+          <MetaItem label="Inspected By" value={inspectionMeta.inspectedBy || "—"} />
+          <MetaItem label="Inspection No" value={inspectionMeta.inspectionNo || "—"} />
+          <MetaItem label="Inspection Timestamp" value={formatDateTime(inspectionMeta.inspectedDate || inspectionMeta.timestamp || inspectionMeta.inspectedAt)} />
+        </div>
+        <hr />
+      </div>
       <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
         <div>
           <h2 className="fw-semibold mb-1">Maintenance Record</h2>
           <div className="text-muted small">{printReadyHint || "Draft not yet saved"}</div>
         </div>
-        <div className="actions-bar print-hidden">
+        <div className="actions-bar print-hidden screen-only">
           <Button
             variant="outline-secondary"
             onClick={() => navigate(-1)}
@@ -403,34 +425,36 @@ export default function MaintenanceRecordPage() {
               <div className="d-flex flex-column gap-3">
                 <div className="d-flex flex-column flex-lg-row gap-4">
                   <div className="flex-grow-1">
-                    <div className="section-heading mb-3">Transformer Metadata</div>
+                    <div className="section-heading mb-3">Metadata</div>
                     <div className="meta-grid">
-                      <MetaItem label="Transformer ID" value={transformerMeta.transformerNo || transformerMeta.id || "—"} />
-                      <MetaItem label="Location" value={transformerMeta.location || transformerMeta.branch || "—"} />
-                      <MetaItem label="Capacity" value={transformerMeta.capacity || transformerMeta.rating || "—"} />
-                      <MetaItem label="Inspection Timestamp" value={formatDateTime(inspectionMeta.timestamp || inspectionMeta.inspectedAt)} />
-                      <MetaItem label="Inspection ID" value={inspectionMeta.id || inspectionId || "—"} />
-                      <MetaItem label="Status" value={engineerFields.status || "Draft"} />
+                      <MetaItem label="Transformer No" value={transformerMeta.transformerNo || "—"} />
+                      <MetaItem label="Pole No" value={transformerMeta.pole_no || "—"} />
+                      <MetaItem label="Region" value={transformerMeta.region || "—"} />
+                      <MetaItem label="Inspected By" value={inspectionMeta.inspectedBy || "—"} />
+                      <MetaItem label="Inspection No" value={inspectionMeta.inspectionNo || "—"} />
+                      <MetaItem label="Inspection Timestamp" value={formatDateTime(inspectionMeta.inspectedDate || inspectionMeta.timestamp || inspectionMeta.inspectedAt)} />
                     </div>
                   </div>
                   <div className="flex-grow-1">
                     <div className="section-heading mb-3">Thermal Snapshot</div>
                     {maintenanceImageUrl ? (
-                      <PanZoomContainFrame
-                        src={maintenanceImageUrl}
-                        label="Maintenance Image"
-                        metaText={formatDateTime(record?.maintenanceImage?.capturedAt || record?.maintenanceImage?.uploadDate)}
-                        containerHeight={DEFAULT_CONTAINER_HEIGHT}
-                        syncZoomOn={false}
-                        isHoveringSync={false}
-                        onSyncEnter={undefined}
-                        onSyncLeave={undefined}
-                        onSyncMove={undefined}
-                        resetTrigger={resetTrigger}
-                        annotationTool="move"
-                        annotations={anomalyRows}
-                        imageId={record?.maintenanceImage?.id}
-                      />
+                      <div className="print-avoid-break">
+                        <PanZoomContainFrame
+                          src={maintenanceImageUrl}
+                          label="Maintenance Image"
+                          metaText={formatDateTime(record?.maintenanceImage?.capturedAt || record?.maintenanceImage?.uploadDate)}
+                          containerHeight={DEFAULT_CONTAINER_HEIGHT}
+                          syncZoomOn={false}
+                          isHoveringSync={false}
+                          onSyncEnter={undefined}
+                          onSyncLeave={undefined}
+                          onSyncMove={undefined}
+                          resetTrigger={resetTrigger}
+                          annotationTool="move"
+                          annotations={anomalyRows}
+                          imageId={record?.maintenanceImage?.id}
+                        />
+                      </div>
                     ) : (
                       <div className="d-flex flex-column align-items-center justify-content-center border rounded-4 p-4 bg-light text-muted" style={{ minHeight: DEFAULT_CONTAINER_HEIGHT }}>
                         <i className="bi bi-image fs-1 mb-2" />

@@ -5,12 +5,12 @@ import Sidebar from '../components/sidebar';
 
 export default function AppLayout() {
   return (
-    <Container fluid>
+    <Container fluid className="app-layout">
       <Row>
-        <Col md={2} className="bg-white vh-100 p-3 text-dark">
+        <Col md={2} className="app-sidebar bg-white vh-100 p-3 text-dark">
           <Sidebar />
         </Col>
-        <Col md={10} style={{ backgroundColor: '#F5F5F5' }} className="p-4">
+        <Col md={10} style={{ backgroundColor: '#F5F5F5' }} className="app-content p-4">
           <Outlet />
         </Col>
       </Row>
